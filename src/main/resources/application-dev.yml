@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: Test Call API Server
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    ROOT: INFO

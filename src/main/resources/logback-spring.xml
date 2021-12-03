@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- prrfile setting -->
+    <springProfile name="alpha">
+        <property resource="application-alpha.yml"/>
+    </springProfile>
+    <springProfile name="dev">
+        <property resource="application-dev.yml"/>
+    </springProfile>
+    <springProfile name="local">
+        <property resource="application-local.yml"/>
+    </springProfile>
+    <springProfile name="real">
+        <property resource="application-real.yml"/>
+    </springProfile>
+
+    <!-- Appender -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %highlight([%-5level]) %magenta([%thread]) %cyan([%logger{5}\(%line\)]) -
+                %msg%n%ex{3}
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="dailyRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}</file>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%-5level] [%thread] [%logger{5}\(%line\)] - %msg%n%ex{3}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- ===================================================================================================== -->
+
+    <!-- Profile -->
+    <springProfile name="local">
+        <root level="debug">
+            <appender-ref ref="console"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev">
+        <logger name="com.apitest.callapi" level="info">
+            <appender-ref ref="dailyRollingFile"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="real">
+        <logger name="com.apitest.callapi" level="error">
+            <appender-ref ref="dailyRollingFile"/>
+        </logger>
+    </springProfile>
+
+</configuration>
